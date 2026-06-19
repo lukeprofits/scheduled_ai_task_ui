@@ -1,6 +1,4 @@
-# scheduled_ai_task_ui
-
-Schedule recurring Grok Build & Claude Code tasks in a few clicks.
+# Schedule recurring Grok Build & Claude Code tasks in a few clicks.
 
 <br>
 
