@@ -6,8 +6,6 @@ Schedule recurring Grok Build & Claude Code tasks in a few clicks.
 
 <div align="center">
 
-### ▶ [**Open the app**](https://lukeprofits.github.io/scheduled_ai_task_ui/)
-
 [![Open the app](https://img.shields.io/badge/▶_Open_the_app-6366f1?style=for-the-badge&logoColor=white)](https://lukeprofits.github.io/scheduled_ai_task_ui/)
 
 </div>
