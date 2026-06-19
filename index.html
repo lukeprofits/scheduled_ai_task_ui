@@ -40,17 +40,12 @@
         /* Icons */
         .ico { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* Header */
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; gap: 16px; flex-wrap: wrap; }
-        .brand { display: flex; align-items: center; gap: 12px; }
-        .logo { width: 40px; height: 40px; border-radius: 14px; background: var(--card); border: 1px solid var(--bd); display: flex; align-items: center; justify-content: center; }
-        .logo-inner { width: 22px; height: 22px; border-radius: 8px; background: linear-gradient(135deg, var(--indigo4), #8b5cf6); display: flex; align-items: center; justify-content: center; color: #0a0a0b; font-size: 13px; }
-        .brand-title { font-size: 21px; font-weight: 600; letter-spacing: -0.6px; }
-        .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--card); border: 1px solid var(--bd); border-radius: 16px; font-size: 12px; color: var(--m4); font-weight: 500; }
+        /* Badge */
+        .badge { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--card); border: 1px solid var(--bd); border-radius: 16px; font-size: 12px; color: var(--m4); font-weight: 500; }
         .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
 
         /* Hero */
-        .hero { margin-bottom: 36px; }
+        .hero { margin-bottom: 36px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
         .hero h1 { font-size: 46px; line-height: 1.05; letter-spacing: -2px; font-weight: 600; margin: 0; }
         .hero h1 .muted { color: var(--m4); }
         .hero p { margin: 12px 0 0; font-size: 20px; color: var(--m4); max-width: 30rem; }
@@ -112,9 +107,6 @@
         .panel { background: var(--card); border: 1px solid var(--bd); border-radius: 28px; padding: 24px; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s; }
         .panel:hover { transform: translateY(-2px); }
         .panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
-        .agent-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0a0a0b; font-size: 14px; font-weight: 700; }
-        .agent-icon.grok { background: linear-gradient(135deg, #fb923c, #f59e0b); }
-        .agent-icon.claude { background: linear-gradient(135deg, var(--violet), #a855f7); }
         .agent-name { font-size: 17px; font-weight: 600; letter-spacing: -0.2px; }
         .agent-sub { font-size: 12px; color: var(--m5); margin-top: -2px; }
 
@@ -145,9 +137,6 @@
 
         .note { text-align: center; color: var(--m6); font-size: 12px; margin-top: 16px; }
         .note.big { color: var(--m4); font-size: 14px; margin-top: 32px; }
-        .newtask { text-align: center; margin-top: 20px; }
-        .newtask button { background: none; border: none; color: var(--m5); font-size: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; }
-        .newtask button:hover { color: var(--tx); }
 
         .help { background: var(--card); border: 1px solid var(--bd); border-radius: 18px; padding: 16px 20px; margin-top: 24px; font-size: 12px; color: var(--m5); line-height: 1.7; }
         .help b { color: var(--m4); }
@@ -161,23 +150,13 @@
 <body>
     <div class="wrap">
 
-        <!-- Header -->
-        <div class="header">
-            <div class="brand">
-                <div class="logo">
-                    <div class="logo-inner">
-                        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-                    </div>
-                </div>
-                <div class="brand-title">Schedule an AI Task</div>
-            </div>
-            <div class="badge"><span class="dot"></span><span>Runs 100% locally</span></div>
-        </div>
-
         <!-- Hero -->
         <div class="hero">
-            <h1>Schedule Grok or Claude.<br><span class="muted">One paste.</span></h1>
-            <p>No cron syntax. No scripting. Just tell it what to do.</p>
+            <div class="hero-text">
+                <h1>Schedule Grok or Claude.<br><span class="muted">One paste.</span></h1>
+                <p>No cron syntax. No scripting. Just tell it what to do.</p>
+            </div>
+            <div class="badge"><span class="dot"></span><span>Runs 100% locally</span></div>
         </div>
 
         <!-- Before you start -->
@@ -194,7 +173,7 @@
                     placeholder="Every morning, give me a short briefing with today's weather, my top priorities, and one interesting thing happening."></textarea>
                 <div class="chips">
                     <div class="chip" onclick="loadExample(0)">Morning briefing</div>
-                    <div class="chip" onclick="loadExample(1)">Track Bitcoin price daily</div>
+                    <div class="chip" onclick="loadExample(1)">Track Monero price daily</div>
                     <div class="chip" onclick="loadExample(2)">Weekly personal reflection</div>
                     <div class="chip" onclick="loadExample(3)">Daily news summary</div>
                 </div>
@@ -247,7 +226,6 @@
             <!-- Grok -->
             <div class="panel grok">
                 <div class="panel-head">
-                    <div class="agent-icon grok">G</div>
                     <div>
                         <div class="agent-name">Grok Build</div>
                         <div class="agent-sub">xAI</div>
@@ -271,7 +249,6 @@
             <!-- Claude -->
             <div class="panel claude">
                 <div class="panel-head">
-                    <div class="agent-icon claude">C</div>
                     <div>
                         <div class="agent-name">Claude Code</div>
                         <div class="agent-sub">Anthropic</div>
@@ -301,15 +278,11 @@
             </div>
         </div>
 
-        <div class="newtask">
-            <button onclick="newTask()">+ Start a separate task (so this won't replace the last one)</button>
-        </div>
-
         <div class="note big">
             Paste it into your terminal and press <code>Enter</code>. That's it — it's scheduled.
         </div>
         <div class="note">
-            Pasting again later updates this same task instead of duplicating it. To remove it, run <code>crontab -e</code> and delete the line.
+            Paste the exact same task again and it just updates in place — no duplicates, and your other cron jobs are untouched. Change the prompt or schedule and it becomes a new, separate task. To remove one, run <code>crontab -e</code> and delete its line.
         </div>
 
         <div class="help">
@@ -328,9 +301,10 @@
 
     <script>
         let currentFrequency = 'daily';
-        let taskId = 'task';
 
-        function genId() { return 't' + Math.random().toString(36).slice(2, 10); }
+        // Deterministic id derived from a task's content (djb2 -> base36).
+        // Same task -> same id (idempotent update); any change -> new id (separate job).
+        function hashId(str) { let h = 5381; for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0; return 't' + h.toString(36); }
 
         function setFrequency(freq) {
             currentFrequency = freq;
@@ -364,15 +338,14 @@
         }
 
         function loadExample(index) {
+            // Examples only fill the prompt — working directory stays whatever the user set (opt-in, never auto-populated).
             const examples = [
-                { prompt: "Every morning, give me a short personalized briefing with today's weather, my top 3 priorities, and one interesting thing happening in the world.", dir: "" },
-                { prompt: "Check the current price of Bitcoin and Ethereum, then append the prices with today's date to a tracking file.", dir: "~/data/crypto-tracker" },
-                { prompt: "Write a short, honest weekly reflection on what went well and what I want to improve next week.", dir: "" },
-                { prompt: "Summarize the top news stories from the last 24 hours in a neutral and concise way.", dir: "" }
+                "Every morning, give me a short personalized briefing with today's weather, my top 3 priorities, and one interesting thing happening in the world.",
+                "Check the current price of Monero, then append the price with today's date to a tracking file.",
+                "Write a short, honest weekly reflection on what went well and what I want to improve next week.",
+                "Summarize the top news stories from the last 24 hours in a neutral and concise way."
             ];
-            const ex = examples[index];
-            document.getElementById('prompt').value = ex.prompt;
-            if (ex.dir) document.getElementById('working-dir').value = ex.dir;
+            document.getElementById('prompt').value = examples[index];
             document.getElementById('prompt').focus();
             saveState();
             updatePreviews();
@@ -446,9 +419,12 @@
             const cron = generateCronExpression();
             const promptForCron = sq(prompt).replace(/%/g, '\\%'); // layer A + crontab %
             const inner = buildInner(agent, promptForCron);
-            const marker = `# scheduled-ai-task:${taskId}`;
-            // layer B: wrap inner for bash -lc '...'; trailing marker is a shell comment at run time, used as a dedup tag
-            const cronLine = `${cron} /usr/bin/env bash -lc '${sq(inner)}' ${marker}`;
+            // layer B: wrap inner for bash -lc '...'
+            const cronBody = `${cron} /usr/bin/env bash -lc '${sq(inner)}'`;
+            // id is derived from the command content: identical task -> same id (idempotent), any change -> new job
+            const taskId = hashId(agent + '|' + cronBody);
+            const marker = `# scheduled-ai-task:${taskId}`; // trailing shell comment at run time, used as a dedup tag
+            const cronLine = `${cronBody} ${marker}`;
             // layer C: remove the prior version of THIS task, then append; whole line wrapped for echo '...'
             return `(crontab -l 2>/dev/null | grep -v 'scheduled-ai-task:${taskId}'; echo '${sq(cronLine)}') | crontab -`;
         }
@@ -502,13 +478,6 @@
             toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
         }
 
-        function newTask() {
-            taskId = genId();
-            saveState();
-            updatePreviews();
-            showToast("Started a separate task");
-        }
-
         function getCheckedTools() {
             return Array.from(document.querySelectorAll('.tool:checked')).map(cb => cb.value);
         }
@@ -520,14 +489,13 @@
                 frequency: currentFrequency,
                 time: document.getElementById('time').value,
                 day: document.getElementById('day-of-week').value,
-                tools: getCheckedTools(),
-                taskId: taskId
+                tools: getCheckedTools()
             }));
         }
 
         function loadState() {
             const saved = localStorage.getItem('headlessScheduler_v2');
-            if (!saved) { taskId = genId(); setFrequency('daily'); return; }
+            if (!saved) { setFrequency('daily'); return; }
             try {
                 const d = JSON.parse(saved);
                 if (d.prompt) document.getElementById('prompt').value = d.prompt;
@@ -537,9 +505,8 @@
                 if (Array.isArray(d.tools)) {
                     document.querySelectorAll('.tool').forEach(cb => { cb.checked = d.tools.includes(cb.value); });
                 }
-                taskId = d.taskId || genId();
                 setFrequency(d.frequency || 'daily');
-            } catch (e) { taskId = genId(); setFrequency('daily'); }
+            } catch (e) { setFrequency('daily'); }
         }
 
         function init() {
