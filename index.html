@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule an AI Task</title>
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --card: #18181b;
+            --inner: #09090b;
+            --bd: rgba(255,255,255,.10);
+            --bd2: rgba(255,255,255,.20);
+            --tx: #e4e4e7;
+            --m4: #a1a1aa;
+            --m5: #71717a;
+            --m6: #52525b;
+            --indigo: #6366f1;
+            --indigo4: #818cf8;
+            --violet: #a78bfa;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --shadow: 0 20px 25px -5px rgba(0,0,0,.45), 0 8px 10px -6px rgba(0,0,0,.45);
+            --radius: 24px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--tx);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 32px; }
+
+        /* Icons */
+        .ico { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Header */
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; gap: 16px; flex-wrap: wrap; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .logo { width: 40px; height: 40px; border-radius: 14px; background: var(--card); border: 1px solid var(--bd); display: flex; align-items: center; justify-content: center; }
+        .logo-inner { width: 22px; height: 22px; border-radius: 8px; background: linear-gradient(135deg, var(--indigo4), #8b5cf6); display: flex; align-items: center; justify-content: center; color: #0a0a0b; font-size: 13px; }
+        .brand-title { font-size: 21px; font-weight: 600; letter-spacing: -0.6px; }
+        .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--card); border: 1px solid var(--bd); border-radius: 16px; font-size: 12px; color: var(--m4); font-weight: 500; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+
+        /* Hero */
+        .hero { margin-bottom: 36px; }
+        .hero h1 { font-size: 46px; line-height: 1.05; letter-spacing: -2px; font-weight: 600; margin: 0; }
+        .hero h1 .muted { color: var(--m4); }
+        .hero p { margin: 12px 0 0; font-size: 20px; color: var(--m4); max-width: 30rem; }
+
+        /* Cards */
+        .card { background: var(--card); border: 1px solid var(--bd); border-radius: 28px; padding: 32px; box-shadow: var(--shadow); margin-bottom: 20px; }
+
+        /* Before-you-start note */
+        .prereq { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--bd); border-radius: 18px; padding: 16px 18px; margin-bottom: 20px; font-size: 13px; color: var(--m4); }
+        .prereq b { color: var(--tx); font-weight: 600; }
+        .prereq .ico { color: var(--indigo4); font-size: 18px; flex: none; margin-top: 1px; }
+        code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--inner); border: 1px solid var(--bd); padding: 1px 6px; border-radius: 6px; font-size: .9em; }
+
+        /* Fields */
+        .field { margin-bottom: 28px; }
+        .field:last-child { margin-bottom: 0; }
+        .label { display: block; font-size: 14px; font-weight: 600; letter-spacing: -0.2px; margin: 0 0 8px 4px; }
+        .label .opt { color: var(--m5); font-size: 12px; font-weight: 400; }
+        .sublabel { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--m5); margin: 0 0 6px 4px; }
+
+        .input, .select {
+            width: 100%; background: var(--inner); color: var(--tx);
+            border: 1px solid var(--bd); border-radius: 16px;
+            padding: 14px 18px; font-size: 15px; font-family: inherit;
+            transition: border-color .15s, box-shadow .15s;
+        }
+        textarea.input { padding: 18px 22px; line-height: 1.6; resize: vertical; min-height: 96px; }
+        .input::placeholder { color: var(--m6); }
+        .input:focus, .select:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 4px rgba(99,102,241,.14); }
+        .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+
+        .row { display: flex; gap: 12px; }
+        .row .input { flex: 1; }
+        .btn-ghost { padding: 0 20px; background: var(--inner); color: var(--m4); border: 1px solid var(--bd); border-radius: 16px; cursor: pointer; font-size: 14px; font-family: inherit; transition: background .15s, color .15s; }
+        .btn-ghost:hover { background: #27272a; color: var(--tx); }
+
+        /* Examples / chips */
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0 4px; }
+        .chip { cursor: pointer; font-size: 12px; padding: 6px 14px; background: var(--inner); border: 1px solid var(--bd); border-radius: 16px; color: var(--tx); transition: border-color .12s, background .12s; }
+        .chip:hover { border-color: var(--bd2); background: #27272a; }
+
+        /* Frequency pills */
+        .freq { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .pill { padding: 9px 20px; font-size: 14px; font-weight: 500; background: var(--inner); color: var(--tx); border: 1px solid var(--bd); border-radius: 16px; cursor: pointer; font-family: inherit; transition: background .1s, box-shadow .1s; }
+        .pill:hover { background: #27272a; }
+        .pill.active { background: var(--indigo); color: #fff; border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(99,102,241,.18); }
+
+        .grid2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 700px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+        input[type=time].input { font-size: 20px; font-weight: 500; }
+        .hidden { display: none !important; }
+
+        .sched-note { margin-top: 16px; display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--inner); border: 1px solid var(--bd); border-radius: 16px; font-size: 14px; color: var(--tx); font-weight: 500; }
+        .sched-note .ico { color: var(--indigo4); font-size: 16px; }
+
+        /* Agent panels */
+        .panels { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 1000px) { .panels { grid-template-columns: 1fr 1fr; } }
+        .panel { background: var(--card); border: 1px solid var(--bd); border-radius: 28px; padding: 24px; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s; }
+        .panel:hover { transform: translateY(-2px); }
+        .panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+        .agent-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0a0a0b; font-size: 14px; font-weight: 700; }
+        .agent-icon.grok { background: linear-gradient(135deg, #fb923c, #f59e0b); }
+        .agent-icon.claude { background: linear-gradient(135deg, var(--violet), #a855f7); }
+        .agent-name { font-size: 17px; font-weight: 600; letter-spacing: -0.2px; }
+        .agent-sub { font-size: 12px; color: var(--m5); margin-top: -2px; }
+
+        .tools { margin-bottom: 18px; padding: 0 4px; }
+        .tools-label { font-size: 12px; font-weight: 600; color: var(--tx); margin-bottom: 10px; }
+        .tools-label span { font-weight: 400; color: var(--emerald); }
+        .tool-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; font-size: 13px; color: var(--m4); }
+        .tool-row input { width: 16px; height: 16px; accent-color: var(--violet); flex: none; }
+        .tools-hint { font-size: 11px; color: var(--m5); margin-top: 8px; line-height: 1.5; }
+
+        .btn-copy { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--inner); border: 1px solid var(--bd); border-radius: 16px; cursor: pointer; color: var(--tx); font-family: inherit; transition: background .15s, border-color .15s; }
+        .btn-copy:hover { background: #27272a; }
+        .btn-copy .left { display: flex; align-items: center; gap: 12px; }
+        .btn-copy .ico-lead { font-size: 18px; }
+        .btn-copy .title { font-weight: 600; font-size: 14px; text-align: left; }
+        .btn-copy .sub { font-size: 12px; color: var(--m5); margin-top: -2px; text-align: left; }
+        .btn-copy .action { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; padding-right: 4px; }
+        .panel.grok .btn-copy:hover { border-color: rgba(52,211,153,.4); }
+        .panel.grok .ico-lead, .panel.grok .action { color: var(--emerald); }
+        .panel.claude .btn-copy:hover { border-color: rgba(167,139,250,.45); }
+        .panel.claude .ico-lead, .panel.claude .action { color: var(--violet); }
+
+        details.preview { margin-top: 12px; }
+        details.preview summary { cursor: pointer; font-size: 12px; color: var(--m5); padding: 0 4px; user-select: none; list-style: none; }
+        details.preview summary::-webkit-details-marker { display: none; }
+        details.preview summary:hover { color: var(--tx); }
+        details.preview pre { margin: 8px 0 0; white-space: pre-wrap; word-break: break-all; background: var(--inner); border: 1px solid var(--bd); border-radius: 12px; padding: 12px 16px; font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--m4); line-height: 1.6; }
+
+        .note { text-align: center; color: var(--m6); font-size: 12px; margin-top: 16px; }
+        .note.big { color: var(--m4); font-size: 14px; margin-top: 32px; }
+        .newtask { text-align: center; margin-top: 20px; }
+        .newtask button { background: none; border: none; color: var(--m5); font-size: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; }
+        .newtask button:hover { color: var(--tx); }
+
+        .help { background: var(--card); border: 1px solid var(--bd); border-radius: 18px; padding: 16px 20px; margin-top: 24px; font-size: 12px; color: var(--m5); line-height: 1.7; }
+        .help b { color: var(--m4); }
+
+        /* Toast */
+        .toast { display: none; position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--bd); color: #fff; padding: 12px 20px; border-radius: 16px; align-items: center; gap: 12px; font-size: 14px; box-shadow: var(--shadow); }
+        .toast.show { display: flex; }
+        .toast .ico { color: var(--emerald); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">
+                    <div class="logo-inner">
+                        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    </div>
+                </div>
+                <div class="brand-title">Schedule an AI Task</div>
+            </div>
+            <div class="badge"><span class="dot"></span><span>Runs 100% locally</span></div>
+        </div>
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>Schedule Grok or Claude.<br><span class="muted">One paste.</span></h1>
+            <p>No cron syntax. No scripting. Just tell it what to do.</p>
+        </div>
+
+        <!-- Before you start -->
+        <div class="prereq">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+            <div><b>Before you start:</b> install the agent's CLI and sign in once — run <code>claude</code> or <code>grok</code> in your terminal and follow the login prompt. This tool just schedules it; it doesn't handle sign-in.</div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card">
+            <div class="field">
+                <label class="label" for="prompt">What should it do?</label>
+                <textarea id="prompt" class="input" rows="3"
+                    placeholder="Every morning, give me a short briefing with today's weather, my top priorities, and one interesting thing happening."></textarea>
+                <div class="chips">
+                    <div class="chip" onclick="loadExample(0)">Morning briefing</div>
+                    <div class="chip" onclick="loadExample(1)">Track Bitcoin price daily</div>
+                    <div class="chip" onclick="loadExample(2)">Weekly personal reflection</div>
+                    <div class="chip" onclick="loadExample(3)">Daily news summary</div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="working-dir">Working Directory <span class="opt">(optional)</span></label>
+                <div class="row">
+                    <input type="text" id="working-dir" class="input mono"
+                        placeholder="/home/username/projects/tracker   or   ~/data/habits">
+                    <button class="btn-ghost" onclick="document.getElementById('working-dir').value=''; saveState(); updatePreviews();">Clear</button>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Schedule</label>
+                <div class="freq" id="frequency-pills">
+                    <button class="pill" id="freq-daily" onclick="setFrequency('daily')">Every day</button>
+                    <button class="pill" id="freq-weekdays" onclick="setFrequency('weekdays')">Weekdays</button>
+                    <button class="pill" id="freq-weekly" onclick="setFrequency('weekly')">Once a week</button>
+                    <button class="pill" id="freq-hourly" onclick="setFrequency('hourly')">Every hour</button>
+                </div>
+                <div class="grid2">
+                    <div>
+                        <label class="sublabel" for="time">Time</label>
+                        <input type="time" id="time" class="input" value="09:00">
+                    </div>
+                    <div id="day-container" class="hidden">
+                        <label class="sublabel" for="day-of-week">Day</label>
+                        <select id="day-of-week" class="select">
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
+                            <option value="0">Sunday</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sched-note">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    <span id="schedule-description">This will run every day at 9:00 AM</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agent Panels -->
+        <div class="panels">
+            <!-- Grok -->
+            <div class="panel grok">
+                <div class="panel-head">
+                    <div class="agent-icon grok">G</div>
+                    <div>
+                        <div class="agent-name">Grok Build</div>
+                        <div class="agent-sub">xAI</div>
+                    </div>
+                </div>
+                <button class="btn-copy" onclick="copyCommand('grok')">
+                    <span class="left">
+                        <svg class="ico ico-lead" viewBox="0 0 24 24"><path d="M4 6l6 6-6 6"/><path d="M13 18h7"/></svg>
+                        <span><span class="title">Copy command</span><br><span class="sub">macOS / Linux</span></span>
+                    </span>
+                    <span class="action">Copy
+                        <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                    </span>
+                </button>
+                <details class="preview">
+                    <summary>Preview command</summary>
+                    <pre id="preview-grok"></pre>
+                </details>
+            </div>
+
+            <!-- Claude -->
+            <div class="panel claude">
+                <div class="panel-head">
+                    <div class="agent-icon claude">C</div>
+                    <div>
+                        <div class="agent-name">Claude Code</div>
+                        <div class="agent-sub">Anthropic</div>
+                    </div>
+                </div>
+                <div class="tools">
+                    <div class="tools-label">Allowed to do without asking <span>(work-safe — no permission bypass)</span></div>
+                    <label class="tool-row"><input type="checkbox" class="tool" value="read" checked> Read files</label>
+                    <label class="tool-row"><input type="checkbox" class="tool" value="write"> Create &amp; edit files</label>
+                    <label class="tool-row"><input type="checkbox" class="tool" value="bash"> Run terminal commands</label>
+                    <label class="tool-row"><input type="checkbox" class="tool" value="web" checked> Search &amp; read the web</label>
+                    <div class="tools-hint">Only the checked tools run unattended; anything else is skipped (never blocked waiting for you). Leave all unchecked for a text-only task.</div>
+                </div>
+                <button class="btn-copy" onclick="copyCommand('claude')">
+                    <span class="left">
+                        <svg class="ico ico-lead" viewBox="0 0 24 24"><path d="M4 6l6 6-6 6"/><path d="M13 18h7"/></svg>
+                        <span><span class="title">Copy command</span><br><span class="sub">macOS / Linux</span></span>
+                    </span>
+                    <span class="action">Copy
+                        <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                    </span>
+                </button>
+                <details class="preview">
+                    <summary>Preview command</summary>
+                    <pre id="preview-claude"></pre>
+                </details>
+            </div>
+        </div>
+
+        <div class="newtask">
+            <button onclick="newTask()">+ Start a separate task (so this won't replace the last one)</button>
+        </div>
+
+        <div class="note big">
+            Paste it into your terminal and press <code>Enter</code>. That's it — it's scheduled.
+        </div>
+        <div class="note">
+            Pasting again later updates this same task instead of duplicating it. To remove it, run <code>crontab -e</code> and delete the line.
+        </div>
+
+        <div class="help">
+            <b>Where do results go?</b> Output is saved to a dated log file in <code>~/agent-logs/</code> (or <code>&lt;working-dir&gt;/logs/</code>). If nothing seems to happen, look there.<br>
+            <b>Test it first:</b> open the preview above, copy just the part after the time fields, and run it once in your terminal to confirm the agent works on a schedule.<br>
+            <b>On macOS:</b> scheduled jobs run with limited access — you may need to give <code>cron</code> Full Disk Access (System Settings → Privacy &amp; Security), and a Keychain-based login can fail unattended. The manual test run will tell you.<br>
+            <b>On Windows:</b> run inside WSL and make sure cron is started (<code>sudo service cron start</code>).
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+        <span id="toast-text">Copied to clipboard</span>
+    </div>
+
+    <script>
+        let currentFrequency = 'daily';
+        let taskId = 'task';
+
+        function genId() { return 't' + Math.random().toString(36).slice(2, 10); }
+
+        function setFrequency(freq) {
+            currentFrequency = freq;
+            document.querySelectorAll('#frequency-pills button').forEach(b => b.classList.remove('active'));
+            const active = document.getElementById('freq-' + freq);
+            if (active) active.classList.add('active');
+            document.getElementById('day-container').classList.toggle('hidden', freq !== 'weekly');
+            updateScheduleDescription();
+        }
+
+        function updateScheduleDescription() {
+            const [hourStr, minuteStr] = document.getElementById('time').value.split(':');
+            const hour = parseInt(hourStr, 10);
+            const mm = (minuteStr || '00').padStart(2, '0');
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            const timeStr = `${displayHour}:${mm} ${ampm}`;
+
+            let description = '';
+            switch (currentFrequency) {
+                case 'daily': description = `This will run every day at ${timeStr}`; break;
+                case 'weekdays': description = `This will run every weekday (Mon–Fri) at ${timeStr}`; break;
+                case 'weekly': {
+                    const sel = document.getElementById('day-of-week');
+                    description = `This will run every ${sel.options[sel.selectedIndex].text} at ${timeStr}`; break;
+                }
+                case 'hourly': description = `This will run every hour at :${mm}`; break;
+            }
+            document.getElementById('schedule-description').textContent = description;
+            updatePreviews();
+        }
+
+        function loadExample(index) {
+            const examples = [
+                { prompt: "Every morning, give me a short personalized briefing with today's weather, my top 3 priorities, and one interesting thing happening in the world.", dir: "" },
+                { prompt: "Check the current price of Bitcoin and Ethereum, then append the prices with today's date to a tracking file.", dir: "~/data/crypto-tracker" },
+                { prompt: "Write a short, honest weekly reflection on what went well and what I want to improve next week.", dir: "" },
+                { prompt: "Summarize the top news stories from the last 24 hours in a neutral and concise way.", dir: "" }
+            ];
+            const ex = examples[index];
+            document.getElementById('prompt').value = ex.prompt;
+            if (ex.dir) document.getElementById('working-dir').value = ex.dir;
+            document.getElementById('prompt').focus();
+            saveState();
+            updatePreviews();
+        }
+
+        function generateCronExpression() {
+            const [hour, minute] = document.getElementById('time').value.split(':').map(Number);
+            switch (currentFrequency) {
+                case 'daily': return `${minute} ${hour} * * *`;
+                case 'weekdays': return `${minute} ${hour} * * 1-5`;
+                case 'weekly': return `${minute} ${hour} * * ${document.getElementById('day-of-week').value}`;
+                case 'hourly': return `${minute} * * * *`;
+                default: return `${minute} ${hour} * * *`;
+            }
+        }
+
+        // Escape a string for safe inclusion inside single quotes: ' -> '\''
+        function sq(str) { return str.replace(/'/g, "'\\''"); }
+        function expandTilde(path) { return path ? path.replace(/^~(?=$|\/)/, '$HOME') : ''; }
+        // Collapse newlines/tabs so a multi-line prompt can't break the single crontab line.
+        function sanitizePrompt(p) { return p.replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim(); }
+
+        // PATH prefix so cron (which has a minimal PATH) can find claude/grok regardless of the user's shell.
+        const PATH_PREFIX = 'export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH";';
+
+        // Maps each checkbox to the Claude Code tools it allows (work-safe allowlist, no permission bypass).
+        const TOOL_MAP = {
+            read: ['Read', 'Glob', 'Grep'],
+            write: ['Write', 'Edit', 'MultiEdit'],
+            bash: ['Bash'],
+            web: ['WebSearch', 'WebFetch']
+        };
+
+        function getAllowedToolsFlag() {
+            const tools = [];
+            document.querySelectorAll('.tool:checked').forEach(cb => {
+                (TOOL_MAP[cb.value] || []).forEach(t => tools.push(t));
+            });
+            return tools.length ? ' --allowedTools ' + tools.map(t => `"${t}"`).join(' ') : '';
+        }
+
+        // Inner bash script cron runs via: bash -lc 'INNER'. Paths use double quotes so $HOME / $(date) expand.
+        function buildInner(agent, promptForCron) {
+            const agentCmd = agent === 'grok'
+                ? `grok -p '${promptForCron}'`
+                : `claude -p '${promptForCron}'${getAllowedToolsFlag()}`;
+
+            const workingDir = document.getElementById('working-dir').value.trim();
+            const dateStamp = '$(date +\\%Y-\\%m-\\%d)'; // \% keeps % literal for crontab
+
+            if (workingDir) {
+                const dir = expandTilde(workingDir);
+                const logDir = `${dir}/logs`;
+                return `${PATH_PREFIX} cd "${dir}" && mkdir -p "${logDir}" && ${agentCmd} >> "${logDir}/${dateStamp}.log" 2>&1`;
+            }
+            const logDir = '$HOME/agent-logs';
+            return `${PATH_PREFIX} mkdir -p "${logDir}" && ${agentCmd} >> "${logDir}/${dateStamp}.log" 2>&1`;
+        }
+
+        // Full one-liner the user pastes. silent=true suppresses the empty-prompt toast (preview).
+        function buildCommand(agent, silent) {
+            const raw = document.getElementById('prompt').value;
+            const prompt = sanitizePrompt(raw);
+            if (!prompt) {
+                if (!silent) {
+                    showToast("Please enter what you want it to do", true);
+                    document.getElementById('prompt').focus();
+                }
+                return null;
+            }
+            const cron = generateCronExpression();
+            const promptForCron = sq(prompt).replace(/%/g, '\\%'); // layer A + crontab %
+            const inner = buildInner(agent, promptForCron);
+            const marker = `# scheduled-ai-task:${taskId}`;
+            // layer B: wrap inner for bash -lc '...'; trailing marker is a shell comment at run time, used as a dedup tag
+            const cronLine = `${cron} /usr/bin/env bash -lc '${sq(inner)}' ${marker}`;
+            // layer C: remove the prior version of THIS task, then append; whole line wrapped for echo '...'
+            return `(crontab -l 2>/dev/null | grep -v 'scheduled-ai-task:${taskId}'; echo '${sq(cronLine)}') | crontab -`;
+        }
+
+        function updatePreviews() {
+            ['grok', 'claude'].forEach(agent => {
+                const el = document.getElementById('preview-' + agent);
+                if (!el) return;
+                el.textContent = buildCommand(agent, true) || 'Enter a task above to see the command.';
+            });
+        }
+
+        function fallbackCopy(text, label) {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(label);
+            } catch (e) {
+                showToast("Couldn't copy — open Preview and copy it manually", true);
+            }
+        }
+
+        function copyCommand(agent) {
+            const command = buildCommand(agent);
+            if (!command) return;
+            const label = agent === 'grok' ? 'Copied Grok Build command' : 'Copied Claude Code command';
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(command).then(() => showToast(label)).catch(() => fallbackCopy(command, label));
+                } else {
+                    fallbackCopy(command, label);
+                }
+            } catch (e) {
+                fallbackCopy(command, label);
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(msg, error = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = msg;
+            toast.style.borderColor = error ? '#f87171' : 'var(--bd)';
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        function newTask() {
+            taskId = genId();
+            saveState();
+            updatePreviews();
+            showToast("Started a separate task");
+        }
+
+        function getCheckedTools() {
+            return Array.from(document.querySelectorAll('.tool:checked')).map(cb => cb.value);
+        }
+
+        function saveState() {
+            localStorage.setItem('headlessScheduler_v2', JSON.stringify({
+                prompt: document.getElementById('prompt').value,
+                workingDir: document.getElementById('working-dir').value,
+                frequency: currentFrequency,
+                time: document.getElementById('time').value,
+                day: document.getElementById('day-of-week').value,
+                tools: getCheckedTools(),
+                taskId: taskId
+            }));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('headlessScheduler_v2');
+            if (!saved) { taskId = genId(); setFrequency('daily'); return; }
+            try {
+                const d = JSON.parse(saved);
+                if (d.prompt) document.getElementById('prompt').value = d.prompt;
+                if (d.workingDir) document.getElementById('working-dir').value = d.workingDir;
+                if (d.time) document.getElementById('time').value = d.time;
+                if (d.day) document.getElementById('day-of-week').value = d.day;
+                if (Array.isArray(d.tools)) {
+                    document.querySelectorAll('.tool').forEach(cb => { cb.checked = d.tools.includes(cb.value); });
+                }
+                taskId = d.taskId || genId();
+                setFrequency(d.frequency || 'daily');
+            } catch (e) { taskId = genId(); setFrequency('daily'); }
+        }
+
+        function init() {
+            loadState();
+            document.getElementById('time').addEventListener('input', updateScheduleDescription);
+            document.getElementById('day-of-week').addEventListener('change', updateScheduleDescription);
+            ['prompt', 'working-dir', 'time', 'day-of-week'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', () => { saveState(); updatePreviews(); });
+            });
+            document.querySelectorAll('.tool').forEach(cb => {
+                cb.addEventListener('change', () => { saveState(); updatePreviews(); });
+            });
+            document.addEventListener('keydown', e => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); copyCommand('claude'); }
+            });
+            setFrequency(currentFrequency);
+            setTimeout(updateScheduleDescription, 50);
+            updatePreviews();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
